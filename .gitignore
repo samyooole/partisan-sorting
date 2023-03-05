@@ -6,6 +6,9 @@ __pycache__/
 # C extensions
 *.so
 
+# Big data folders that we don't want to take up space
+bigdata
+
 # Distribution / packaging
 .Python
 build/
