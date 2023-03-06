@@ -7,6 +7,8 @@ import zipfile_deflate64 as zipfile
 
 path_to_zip_file = "C:\\Users\\Samuel\\partisan-sorting\\bigdata\\NC\\VR_Snapshot_20230101.zip"
 
+paths = ['bigdata/NC/VR_Snapshot_20221206.zip', 'bigdata/NC/VR_Snapshot_20211102.zip', 'bigdata/NC/VR_Snapshot_20201103.zip', 'bigdata/NC/VR_Snapshot_20191105.zip','bigdata/NC/VR_Snapshot_20181106.zip', 'bigdata/NC/VR_Snapshot_20171107.zip', 'bigdata/NC/VR_Snapshot_20161108.zip', 'bigdata/NC/VR_Snapshot_20151103.zip', 'bigdata/NC/VR_Snapshot_20141104.zip', 'bigdata/NC/VR_Snapshot_20131105.zip', 'bigdata/NC/VR_Snapshot_20121106.zip', 'bigdata/NC/VR_Snapshot_20120101.zip', 'bigdata/NC/VR_Snapshot_20101102.zip']
+
 with zipfile.ZipFile(path_to_zip_file, 'r') as zip_ref:
     zip_ref.extractall('bigdata/unzip_env')
 

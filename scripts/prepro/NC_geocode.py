@@ -1,22 +1,38 @@
 import pandas as pd
+import os
 
-df = pd.read_csv('bigdata/2016-11-08.csv')
 
-df = df.drop(['Unnamed: 0', 'status_cd'],axis=1)
+"""
+Idea: read and deduplicate at each step - get a universe of voter addresses from North Carolina, then geocode afterwards
+"""
 
-df['year'] = df.snapshot_dt.str[0:4]
+lof = os.listdir('bigdata/NC_clean')
+state_name = 'North Carolina'
 
-df = df.drop(['snapshot_dt'],axis=1)
+ss = pd.Series()
+for file in lof:
 
-df['addr'] = df.house_num.astype('str') + ' ' + df.street_name + ' ' + df.street_type_cd + ' ' + df.street_sufx_cd
+    df = pd.read_csv('bigdata/NC_clean/' + file)
 
-## import geolocation libraries
+    df['addr'] = df.house_num.astype('str') + ' ' + df.street_dir + ' ' + df.street_name + ' ' + df.street_type_cd + ' ' + df.street_sufx_cd + ' ' + state_name + ' ' + df.zip_code.astype('str')
 
-# Import the required library
+    ss = pd.concat([ss, df['addr']], axis=0)
+
+    ss = pd.Series(pd.unique(ss))
+
+
+# sanity check, strip extra whitespace
+
+ss_stripped = ss.replace(r'\s+', ' ', regex=True)
+
+ss_stripped = pd.Series(pd.unique(ss_stripped))
+
+ss_stripped.to_csv('bigdata/NC_addresses.csv')
+
 from geopy.geocoders import Nominatim
 
 # Initialize Nominatim API
 geolocator = Nominatim(user_agent="MyApp")
 
-location = geolocator.geocode("Hyderabad")
+location = geolocator.geocode('220 N GURNEY ST NORTH CAROLINA 27215')
 
