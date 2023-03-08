@@ -1,3 +1,6 @@
 remember to do some sanity checks for people who moved from country
 
 eg. NCID AA2043 voter_reg_num 3000 BAXTER PAUL ABEE who moved away from alamance county
+
+
+- local locator ESRI via harvard cga

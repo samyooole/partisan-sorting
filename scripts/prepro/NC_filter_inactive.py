@@ -33,7 +33,7 @@ for path in paths:
 
     df = pd.DataFrame()
 
-    chunks = pd.read_csv('bigdata/unzip_env/' + unzipped_fn, '\t', usecols= ['snapshot_dt', 'county_desc', 'voter_reg_num', 'status_cd', 'house_num', 'street_dir', 'street_name', 'street_type_cd', 'street_dir', 'street_sufx_cd', 'res_city_desc', 'zip_code', 'party_cd'], chunksize=500000, encoding='utf-16')
+    chunks = pd.read_csv('bigdata/unzip_env/' + unzipped_fn, '\t', usecols= ['snapshot_dt', 'county_desc', 'voter_reg_num', 'ncid', 'status_cd', 'house_num', 'street_dir', 'street_name', 'street_type_cd', 'street_dir', 'street_sufx_cd', 'res_city_desc', 'zip_code', 'party_cd'], chunksize=500000, encoding='utf-16')
 
 
     for chunk in chunks:
@@ -51,7 +51,7 @@ for path in paths:
     Insert processing step that reduces your data in some way or form
     """
 
-    df.to_csv('bigdata/NC_clean/'+ df.snapshot_dt[0]+'.csv')
+    df.to_csv('bigdata/NC_clean/'+ df.snapshot_dt[0]+'.csv', index=False)
 
 
 

@@ -1,0 +1,14 @@
+docker run -it --rm --shm-size=80g -e PBF_PATH=/nominatim/flatnode/iceland-latest.osm.pbf -e THREADS=48 -e IMPORT_STYLE=address -e POSTGRES_SHARED_BUFFERS=4GB -e POSTGRES_WORK_MEM=1GB -e POSTGRES_EFFECTIVE_CACHE_SIZE=20GB -e POSTGRES_MAX_WAL_SIZE=2GB -e POSTGRES_CHECKPOINT_TIMEOUT=50min -p 8080:8080 -v ~/Downloads:/nominatim/flatnode --name nominatim mediagis/nominatim:4.0
+
+
+
+
+docker run --rm `
+  --shm-size=2g -e THREADS=4 -e POSTGRES_SHARED_BUFFERS=1GB -e POSTGRES_MAINTAINENCE_WORK_MEM=1GB -e POSTGRES_AUTOVACUUM_WORK_MEM=1GB -e POSTGRES_WORK_MEM=50MB -e POSTGRES_EFFECTIVE_CACHE_SIZE=1GB -e POSTGRES_SYNCHRONOUS_COMMIT=off -e POSTGRES_MAX_WAL_SIZE=1GB -e POSTGRES_CHECKPOINT_TIMEOUT=10min -e POSTGRES_CHECKPOINT_COMPLETITION_TARGET=0.9 `
+  -v ~/Downloads/osm-data:/nominatim/data `
+  -e PBF_PATH=/nominatim/data/north-carolina-latest.osm.pbf `
+  -e IMPORT_WIKIPEDIA=false `
+  -v nominatim_pg_data:/var/lib/postgresql/12/main `
+  -v ~/Downloads/nominatim-flatnode:/nominatim/flatnode -e NOMINATIM_FLATNODE_FILE=/nominatim/flatnode/flatnode.file `
+  -p 8080:8080 `
+  --name nominatim mediagis/nominatim:3.7
