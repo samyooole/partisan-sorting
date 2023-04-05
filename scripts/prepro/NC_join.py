@@ -36,4 +36,7 @@ for file in lof:
 
     year = newdf.year[0]
 
-    newdf.to_csv('bigdata/NC_analysisready/' + year + '.csv')
+    if file == '2012-01-01.csv':
+        year = '2011'
+
+    newdf.to_csv('bigdata/NC_analysisready/' + year + '.csv', index=False)

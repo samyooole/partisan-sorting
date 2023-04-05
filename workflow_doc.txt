@@ -1,17 +1,14 @@
 - get voter file data
 [chunking MUST be done at each stage of the process]
-- get universe of addresses, then geocode it (arcpy script?) with a local copy of pointaddresses (arcgis/esri) {to write this script today evening}
+- get universe of addresses, then geocode it (arcpy script?) with a local copy of pointaddresses (arcgis/esri) 
 - join on addresses to get latlon
-- keep track of address universe losses {particularly at the statistics stage} --> currently seems to be biased towards rural locations, which is definitely not ideal and i wanna try to minimize these losses {there is no better way already though, apart from maybe using google maps api, but that would be too expensive} [ inclusion of zip codes creates more problems....]
+- universe losses of around 10% - 15%
 
 
-{
+- then assign isolation measure ?? think long and hard about whether this is ACTUALLY necessary lmao. purely with cpu/numpy usage takes around probably 0.5h? for each 500MB dataset {around North Carolina size} //CONSIDER USING GPU , apparently brings down by a factor of 10 + cythonizing it
 
-    without including zip codes: universe is 4193387 addresses
+- consider imputing party affiliation with primary participation
+--> when we impute with party affiliation, it's a bit more problematic because primaries only happen every 2 years, and it only effectively starts in 2013
 
-    --> bias of not including zip codes: leads to residents possibly being misidentified if they have the same address and same city but in different zip codes ?? <check how prevalent this is>
-
-    {CONCLUSION: i don't think it's a huge issue. }
-}
-
-other issue: i don't have NCID ???????????????????????????? also try to parse these number fields as string first just in case
+next steps now:
+1. download 
