@@ -212,6 +212,93 @@ plt.close()
 
 
 """
+Dems (stayers)
+"""
+
+before = pd.read_csv('bigdata/NC_isol/2010.csv')
+after = pd.read_csv('bigdata/NC_isol/2022.csv')
+
+before = before[before['Party'] == 'DEM']
+after = after[after['Party'] == 'DEM']
+
+before = before[['ncid', 'long', 'lat', 'isol']]
+after = after[['ncid', 'long', 'lat', 'isol']]
+
+lon = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+
+for no in lon:
+
+    subbefore = before[ (before['isol'] >= no ) & (before['isol'] < no+0.1 )]
+
+
+    before_new= subbefore.merge(after, on='ncid', how='left')
+
+    before_new = before_new[before_new['lat_y'].notna()]
+
+    movers = before_new[before_new['lat_x'] == before_new['lat_y']]
+    mean_increase = np.mean(movers.isol_y)
+    std_increase = np.std(movers.isol_y)
+
+    plt.errorbar(str(round(no,2)) + ' < x < ' + str(round(no + 0.1, 2)), mean_increase, std_increase, fmt='ok', lw=3, color='blue')
+
+
+plt.xlabel('x = pre partisan isolation in 2010')
+plt.ylabel('level of partisan isolation in 2022')
+plt.title('Post-move partisan isolation for Democrats, 2010-2022')
+
+plt.savefig('summstats/migrators_dems.png')
+plt.close()
+
+
+"""
+Reps (stayers)
+"""
+
+before = pd.read_csv('bigdata/NC_isol/2010.csv')
+after = pd.read_csv('bigdata/NC_isol/2022.csv')
+
+before = before[before['Party'] == 'REP']
+after = after[after['Party'] == 'REP']
+
+before = before[['ncid', 'long', 'lat', 'isol']]
+after = after[['ncid', 'long', 'lat', 'isol']]
+
+lon = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+
+for no in lon:
+
+    subbefore = before[ (before['isol'] >= no ) & (before['isol'] < no+0.1 )]
+
+
+    before_new= subbefore.merge(after, on='ncid', how='left')
+
+    before_new = before_new[before_new['lat_y'].notna()]
+
+    movers = before_new[before_new['lat_x'] == before_new['lat_y']]
+    mean_increase = np.mean(movers.isol_y)
+    std_increase = np.std(movers.isol_y)
+
+    plt.errorbar(str(round(no,2)) + ' < x < ' + str(round(no + 0.1, 2)), mean_increase, std_increase, fmt='ok', lw=3, color='red')
+
+
+plt.xlabel('x = pre-move partisan isolation')
+plt.ylabel('level of partisan isolation after move')
+plt.title('Post-move partisan isolation for Republicans, 2010-2022')
+
+plt.savefig('summstats/migrators_reps.png')
+plt.close()
+
+
+"""
+
+??? so people who move in are causing high isolation scores??
+"""
+
+inmigrants = [item for item in after.ncid if item not in before.ncid]
+
+after[after['ncid'] == inmigrants]
+
+"""
 Analyze change in isolation scores between movers and stayers
 """
 

@@ -32,7 +32,7 @@ sftp = paramiko.SFTPClient.from_transport(transport)
 
 # set year here
 
-year = '2022'
+year = '2017'
 
 filepath = '/n/holylabs/LABS/cga/Lab/data/geo-tweets/cga-sbg/' + year + '/'
 localpath = 'bigdata/geotweets/'
@@ -93,6 +93,45 @@ for idx, batch_i in tqdm(enumerate(batch(lof_clean, n=100))):
 
 
 
+
+############# if connection is lost start here
+
+
+lof_clean = lof_clean[4701:]
+
+for idx, batch_i in enumerate(tqdm(batch(lof_clean, n=100))):
+
+    compildf = pd.DataFrame()
+    for file in tqdm(batch_i):
+        sftp.get(filepath + file, localpath + 'input.gz')
+        
+        with gzip.open(localpath+ 'input.gz', 'rb') as f_in:
+            with open(localpath + 'file.tsv', 'wb') as f_out:
+                shutil.copyfileobj(f_in, f_out)
+
+        try:
+            df = pd.read_csv(localpath + 'file.tsv', '\t', lineterminator='\n')
+        except:
+            continue
+
+
+        df = df[['date','text', 'latitude', 'longitude']]
+        df = df.dropna()
+        df['geometry'] = df.apply(lambda x: Point(x['longitude'], x['latitude']), axis=1)
+
+        df = gpd.GeoDataFrame(df, crs="EPSG:4326")
+
+        localtweets = gpd.sjoin(df, NC_polydf)
+
+        localtweets = localtweets.drop(['index_right', 'state'], axis=1)
+
+        # file management
+
+        compildf = pd.concat([compildf, localtweets])
+
+        localpath+file
+
+    compildf.to_file('bigdata/geotweets/container/' + year + "_" + str(idx) + '.shp', index=False)
 
 
 
